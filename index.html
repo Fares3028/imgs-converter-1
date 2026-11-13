@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e1014">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Imgs Converter">
+<title>Imgs Converter – OnionOS</title>
+<style>
+  :root{
+    --bg:#0e1014; --panel:#161a21; --panel-2:#1e232c; --border:#2a303b;
+    --text:#e9ecf1; --muted:#8b93a3; --accent:#ffb020; --accent-2:#ff8a00;
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Segoe UI",Tahoma,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    background:radial-gradient(120% 60% at 50% 0%, rgba(255,176,32,.10), transparent 60%),var(--bg);
+    background-attachment:fixed;color:var(--text);min-height:100vh;
+    -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;
+    padding-top:env(safe-area-inset-top);
+  }
+
+  /* ---------- Install banner ---------- */
+  .install-banner{
+    display:none;
+    position:sticky;top:0;z-index:30;
+    background:linear-gradient(90deg,#1e1500,#221800);
+    border-bottom:1px solid rgba(255,176,32,.25);
+    padding:10px 14px;
+    padding-top:calc(10px + env(safe-area-inset-top));
+    align-items:center;gap:10px;
+    box-shadow:0 2px 12px rgba(0,0,0,.35);
+  }
+  .install-banner.show{display:flex}
+  .install-banner .ib-text{flex:1;font-size:.82rem;line-height:1.35}
+  .install-banner .ib-text strong{color:var(--accent);display:block;font-size:.88rem;margin-bottom:1px}
+  .install-banner .ib-text span{color:var(--muted);font-size:.75rem}
+  .install-banner button{
+    border:0;background:linear-gradient(180deg,var(--accent),var(--accent-2));
+    color:#1a1206;font-family:inherit;font-weight:800;font-size:.82rem;
+    padding:10px 16px;border-radius:10px;cursor:pointer;white-space:nowrap;
+    box-shadow:0 3px 10px rgba(255,140,0,.28);
+  }
+  .install-banner .ib-close{
+    background:transparent;color:var(--muted);box-shadow:none;
+    padding:6px 10px;font-size:1rem;font-weight:400;
+  }
+
+  /* ---------- Header ---------- */
+  header{padding:26px 16px 18px;text-align:center}
+  .logo{font-size:2rem;line-height:1;margin-bottom:8px}
+  h1{font-size:1.5rem;margin:0 0 7px;font-weight:800;letter-spacing:-.5px}
+  h1 .pill{
+    font-size:.6rem;vertical-align:middle;background:rgba(255,176,32,.14);
+    color:var(--accent);border:1px solid rgba(255,176,32,.3);
+    padding:3px 8px;border-radius:999px;font-weight:700;margin-inline-start:4px;letter-spacing:0;
+  }
+  .sub{margin:0;color:var(--muted);font-size:.85rem}
+
+  /* ---------- Layout ---------- */
+  main{max-width:880px;margin:0 auto;padding:0 14px 40px;display:flex;flex-direction:column;gap:14px}
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+
+  /* ---------- Drop zone ---------- */
+  .drop-zone{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    border:2px dashed var(--border);border-radius:var(--radius);
+    padding:26px 16px;text-align:center;user-select:none;
+    transition:border-color .2s,background .2s;
+  }
+  .drop-zone.dragover{border-color:var(--accent);background:rgba(255,176,32,.05)}
+  .drop-zone svg{width:36px;height:36px;stroke:var(--accent);fill:none;stroke-width:1.8;margin-bottom:2px}
+  .dz-title{margin:0;font-weight:700;font-size:1rem}
+  .dz-sub{margin:0;color:var(--muted);font-size:.82rem}
+
+  /* ---------- Import buttons ---------- */
+  .import-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  @media (max-width:420px){ .import-buttons{grid-template-columns:1fr} }
+  .import-btn{
+    display:flex;align-items:center;gap:12px;
+    background:var(--panel-2);border:1px solid var(--border);
+    border-radius:12px;padding:14px;cursor:pointer;
+    transition:border-color .18s,background .18s,transform .12s;text-align:right;
+  }
+  .import-btn:hover{border-color:var(--accent);background:#232833}
+  .import-btn:active{transform:scale(.985)}
+  .import-btn .ico{
+    flex:0 0 40px;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;
+    background:rgba(255,176,32,.14);color:var(--accent);
+  }
+  .import-btn.folder .ico{background:rgba(96,165,250,.14);color:#60a5fa}
+  .import-btn .ico svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .import-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .import-text strong{font-size:.9rem;font-weight:700;color:var(--text)}
+  .import-text span{font-size:.75rem;color:var(--muted);line-height:1.35}
+
+  .import-note{
+    margin:12px 2px 0;padding:10px 12px;border-radius:10px;
+    background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.18);
+    color:#a9c4e6;font-size:.75rem;line-height:1.6;
+  }
+  .import-note b{color:#60a5fa}
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);
+    background:#1f2630;border:1px solid var(--border);color:var(--text);
+    padding:12px 18px;border-radius:12px;font-size:.85rem;font-weight:600;
+    box-shadow:0 10px 30px rgba(0,0,0,.5);z-index:60;opacity:0;
+    transition:opacity .25s,transform .25s;pointer-events:none;max-width:90vw;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast .num{color:var(--accent);font-weight:800}
+
+  /* ---------- Controls ---------- */
+  .field + .field{margin-top:16px}
+  .field-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+  .field-head label{font-size:.88rem;font-weight:600;color:#cfd5e0}
+  .value-badge{
+    background:var(--panel-2);border:1px solid var(--border);color:var(--accent);
+    font-size:.8rem;font-weight:700;padding:4px 10px;border-radius:8px;
+    font-variant-numeric:tabular-nums;min-width:70px;text-align:center;
+  }
+  .segmented{display:grid;grid-template-columns:1fr 1fr;gap:5px;background:var(--panel-2);padding:5px;border-radius:12px}
+  .mode-btn{
+    border:0;background:transparent;color:var(--muted);font-family:inherit;
+    padding:11px 6px;border-radius:9px;font-size:.9rem;cursor:pointer;
+    transition:background .18s,color .18s,box-shadow .18s;font-weight:600;
+  }
+  .mode-btn.active{
+    background:linear-gradient(180deg,var(--accent),var(--accent-2));
+    color:#1a1206;font-weight:800;box-shadow:0 3px 12px rgba(255,150,0,.28);
+  }
+
+  input[type="range"]{
+    -webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:999px;
+    background:linear-gradient(to right,var(--accent) 0%,var(--accent) var(--fill,56%),var(--panel-2) var(--fill,56%),var(--panel-2) 100%);
+    outline:none;direction:ltr;cursor:pointer;display:block;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+    background:var(--accent);border:3px solid #14181f;cursor:pointer;
+    box-shadow:0 0 0 1px var(--accent),0 2px 8px rgba(0,0,0,.5);
+  }
+  input[type="range"]::-moz-range-thumb{
+    width:18px;height:18px;border-radius:50%;background:var(--accent);
+    border:3px solid #14181f;cursor:pointer;box-shadow:0 0 0 1px var(--accent);
+  }
+  input[type="range"]::-moz-range-track{height:6px;border-radius:999px;background:var(--panel-2)}
+  .range-ends{display:flex;justify-content:space-between;margin-top:6px;color:var(--muted);font-size:.72rem;font-variant-numeric:tabular-nums}
+
+  /* ---------- Primary button ---------- */
+  .btn-primary{
+    width:100%;padding:16px;border:0;border-radius:14px;font-family:inherit;
+    background:linear-gradient(180deg,var(--accent),var(--accent-2));
+    color:#191204;font-weight:800;font-size:1rem;cursor:pointer;
+    box-shadow:0 8px 24px rgba(255,140,0,.22);
+    transition:transform .12s,box-shadow .12s,opacity .2s;
+  }
+  .btn-primary:active{transform:scale(.985)}
+  .btn-primary:disabled{opacity:.4;box-shadow:none;cursor:not-allowed}
+
+  /* ---------- Gallery ---------- */
+  .gallery-section{display:flex;flex-direction:column;gap:12px}
+  .gallery-section[hidden]{display:none}
+  .section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .section-head h2{font-size:1rem;margin:0;display:flex;align-items:center;gap:8px}
+  .count-badge{
+    background:var(--panel-2);border:1px solid var(--border);color:var(--muted);
+    font-size:.75rem;padding:2px 9px;border-radius:999px;font-weight:700;
+    font-variant-numeric:tabular-nums;
+  }
+  .link-btn{background:none;border:0;color:var(--muted);font-family:inherit;font-size:.8rem;cursor:pointer;text-decoration:underline;padding:4px}
+  .link-btn:hover{color:#ff6b6b}
+
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+
+  .card{position:relative;background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+  .thumb{
+    aspect-ratio:1/1;padding:10px;display:grid;place-items:center;
+    background-color:#14171d;
+    background-image:
+      linear-gradient(45deg,#1c2029 25%,transparent 25%),
+      linear-gradient(-45deg,#1c2029 25%,transparent 25%),
+      linear-gradient(45deg,transparent 75%,#1c2029 75%),
+      linear-gradient(-45deg,transparent 75%,#1c2029 75%);
+    background-size:18px 18px;background-position:0 0,0 9px,9px -9px,-9px 0;
+  }
+  .thumb img{max-width:100%;max-height:100%;object-fit:contain;display:block;transition:opacity .2s}
+  .meta{padding:8px;display:flex;flex-direction:column;gap:6px}
+  .fname{
+    font-size:.76rem;color:var(--muted);white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis;direction:ltr;text-align:left;font-variant-numeric:tabular-nums;
+  }
+  .dl{border:0;background:var(--panel-2);color:var(--text);border-radius:8px;padding:9px;font-size:.8rem;font-family:inherit;cursor:pointer;font-weight:600;transition:background .15s}
+  .dl:hover{background:#2b3140}
+  .remove{
+    position:absolute;top:6px;left:6px;width:24px;height:24px;border-radius:50%;
+    border:0;background:rgba(0,0,0,.6);color:#fff;cursor:pointer;font-size:16px;
+    line-height:1;display:grid;place-items:center;z-index:2;
+    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  }
+  .remove:hover{background:rgba(220,50,50,.85)}
+
+  /* ---------- Progress overlay ---------- */
+  .overlay{
+    position:fixed;inset:0;background:rgba(8,9,12,.8);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    display:grid;place-items:center;z-index:50;padding:20px;
+  }
+  .overlay.hidden{display:none}
+  .overlay-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px;width:100%;max-width:340px;text-align:center}
+  .overlay-card p{margin:0;font-size:.9rem;font-weight:600}
+  .bar{height:8px;background:var(--panel-2);border-radius:999px;overflow:hidden;margin:14px 0 8px}
+  .bar-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .15s ease}
+  #overlayCount{color:var(--muted);font-size:.78rem;font-variant-numeric:tabular-nums}
+
+  footer{padding:20px 16px 44px;text-align:center;color:var(--muted);font-size:.74rem;line-height:1.9;padding-bottom:calc(44px + env(safe-area-inset-bottom))}
+  footer p{margin:0}
+
+  @media (min-width:640px){
+    h1{font-size:1.8rem}
+    .gallery{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+    main{padding-bottom:60px}
+  }
+</style>
+</head>
+<body>
+
+<!-- شريط تثبيت PWA (يظهر تلقائياً عند الإمكان) -->
+<div class="install-banner" id="installBanner" role="region" aria-label="تثبيت التطبيق">
+  <div class="ib-text">
+    <strong>ثبّت Imgs Converter</strong>
+    <span>افتحه كتطبيق مستقل يعمل بدون إنترنت</span>
+  </div>
+  <button type="button" id="installBtn">تثبيت</button>
+  <button type="button" class="ib-close" id="installClose" aria-label="إغلاق">✕</button>
+</div>
+
+<header>
+  <div class="logo">🧅</div>
+  <h1>Imgs Converter <span class="pill">OnionOS</span></h1>
+  <p class="sub">جهّز صور ألعابك لـ Miyoo Mini — بأسمائها الأصلية</p>
+</header>
+
+<main>
+  <!-- رفع الصور -->
+  <section class="panel">
+    <div class="drop-zone" id="dropZone">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 16V4m0 0L8 8m4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke-linecap="round"/>
+      </svg>
+      <p class="dz-title">اسحب الصور وأفلتها هنا</p>
+      <p class="dz-sub">أو استخدم أحد الخيارات أدناه</p>
+    </div>
+
+    <div class="import-buttons">
+      <label class="import-btn folder" for="folderInput">
+        <span class="ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
+        </span>
+        <span class="import-text">
+          <strong>اختيار مجلد الصور</strong>
+          <span>استيراد الصور من مجلد كامل</span>
+        </span>
+      </label>
+
+      <label class="import-btn" for="fileInput">
+        <span class="ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
+        </span>
+        <span class="import-text">
+          <strong>اختيار صور متعددة</strong>
+          <span>تحديد صور منفردة من الملفات</span>
+        </span>
+      </label>
+    </div>
+
+    <p class="import-note">
+      💡 <b>ملاحظة:</b> على كمبيوتر Chrome/Edge يمكنك اختيار المجلد كاملاً مباشرة.
+      على الجوال، بعض المتصفحات لا تدعم استيراد مجلد — استخدم «اختيار صور متعددة» من داخل المجلد بدلاً من ذلك.
+    </p>
+
+    <input type="file" id="folderInput" webkitdirectory directory multiple hidden>
+    <input type="file" id="fileInput" accept="image/*" multiple hidden>
+  </section>
+
+  <!-- نمط + حجم -->
+  <section class="panel">
+    <div class="field">
+      <div class="field-head"><label>نمط التحويل</label></div>
+      <div class="segmented" role="group" aria-label="نمط التحويل">
+        <button type="button" class="mode-btn active" data-mode="grayscale">رمادي كامل</button>
+        <button type="button" class="mode-btn" data-mode="faded">ألوان باهتة</button>
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-head">
+        <label for="sizeRange">الحجم</label>
+        <span class="value-badge" id="sizeValue">150 px</span>
+      </div>
+      <input type="range" id="sizeRange" min="32" max="240" step="1" value="150">
+      <div class="range-ends"><span>32</span><span>240</span></div>
+    </div>
+  </section>
+
+  <button class="btn-primary" id="downloadAll" type="button" disabled>تحميل الكل — Imgs.zip</button>
+
+  <section class="gallery-section" id="gallerySection" hidden>
+    <div class="section-head">
+      <h2>الصور الجاهزة <span class="count-badge" id="countBadge">0</span></h2>
+      <button class="link-btn" id="clearAll" type="button">مسح الكل</button>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </section>
+</main>
+
+<footer>
+  <p>جميع عمليات التحويل تتم محلياً داخل متصفحك — لا تُرفع أي صورة إلى أي خادم.</p>
+  <p>لا حاجة لحساب مستخدم · لا يتم تخزين الصور · تُحرَّر الصور داخل ذاكرة المتصفح فقط.</p>
+</footer>
+
+<div class="overlay hidden" id="overlay" role="status" aria-live="polite">
+  <div class="overlay-card">
+    <p id="overlayTitle">معالجة الدفعة…</p>
+    <div class="bar"><div class="bar-fill" id="overlayBar"></div></div>
+    <p id="overlayCount">0 / 0</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================================
+   PWA: توليد الأيقونات + manifest + تسجيل SW + زر التثبيت
+   ========================================================================= */
+(function setupPWA() {
+  'use strict';
+
+  /* ---- 1) توليد الأيقونات (كانفاس + إيموجي) ---- */
+  function generateIcon(size) {
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    // خلفية متدرجة ملء الإطار (متوافق مع maskable)
+    const grd = ctx.createLinearGradient(0, 0, size, size);
+    grd.addColorStop(0, '#ffb020');
+    grd.addColorStop(1, '#ff8a00');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, size, size);
+
+    // الإيموجي في المنتصف (55% — داخل المنطقة الآمنة)
+    ctx.font = `${Math.round(size * 0.55)}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🧅', size / 2, size * 0.54);
+
+    return canvas.toDataURL('image/png');
+  }
+
+  /* ---- 2) بناء manifest.json في وقت التشغيل ---- */
+  function buildManifest() {
+    const icon192 = generateIcon(192);
+    const icon512 = generateIcon(512);
+
+    const manifest = {
+      name: 'Imgs Converter – OnionOS',
+      short_name: 'Imgs Converter',
+      description: 'أداة لتحويل صور الألعاب وتجهيزها لنظام OnionOS على Miyoo Mini',
+      lang: 'ar',
+      dir: 'rtl',
+      start_url: '.',
+      scope: '.',
+      display: 'standalone',
+      display_override: ['standalone', 'minimal-ui'],
+      orientation: 'portrait-primary',
+      background_color: '#0e1014',
+      theme_color: '#0e1014',
+      categories: ['utilities', 'photo', 'games'],
+      icons: [
+        { src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any' },
+        { src: icon192, sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+        { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any' },
+        { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+      ]
+    };
+
+    const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+    return URL.createObjectURL(blob);
+  }
+
+  // حقن manifest + أيقونة Apple
+  try {
+    const icon192 = generateIcon(192);
+    const link = document.createElement('link');
+    link.rel = 'manifest';
+    link.href = buildManifest();
+    document.head.appendChild(link);
+
+    const appleLink = document.createElement('link');
+    appleLink.rel = 'apple-touch-icon';
+    appleLink.href = icon192;
+    document.head.appendChild(appleLink);
+  } catch (e) {
+    console.warn('PWA manifest setup failed:', e);
+  }
+
+  /* ---- 3) تسجيل Service Worker (يعمل فقط عند الاستضافة عبر HTTPS/http) ---- */
+  const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
+  if ('serviceWorker' in navigator && isHttp) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('service-worker.js', { scope: './' })
+        .then((reg) => {
+          console.log('[PWA] Service Worker ready:', reg.scope);
+          // فحص التحديثات
+          reg.addEventListener('updatefound', () => {
+            const nw = reg.installing;
+            if (!nw) return;
+            nw.addEventListener('statechange', () => {
+              if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+                // تحديث متاح — نطبّقه بصمت في الزيارة القادمة
+                console.log('[PWA] تحديث جاهز — سيُفعّل عند إعادة الفتح');
+              }
+            });
+          });
+        })
+        .catch((err) => {
+          console.warn('[PWA] SW registration failed:', err.message);
+        });
+    });
+  }
+
+  /* ---- 4) زر التثبيت ---- */
+  const banner = document.getElementById('installBanner');
+  const installBtn = document.getElementById('installBtn');
+  const closeBtn = document.getElementById('installClose');
+  let deferredPrompt = null;
+
+  // إخفاء إذا كان التطبيق مثبتاً/مفتوحاً في وضع standalone
+  const isStandalone =
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true;
+
+  const wasDismissed = localStorage.getItem('pwa_install_dismissed') === '1';
+
+  function showBanner() {
+    if (isStandalone || wasDismissed) return;
+    banner.classList.add('show');
+  }
+  function hideBanner() {
+    banner.classList.remove('show');
+  }
+
+  // Chrome/Edge/Android: حدث التثبيت الرسمي
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    showBanner();
+  });
+
+  // بعد التثبيت الناجح
+  window.addEventListener('appinstalled', () => {
+    deferredPrompt = null;
+    hideBanner();
+    try { localStorage.setItem('pwa_install_dismissed', '1'); } catch (e) {}
+  });
+
+  // الضغط على "تثبيت"
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      try {
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') hideBanner();
+      } catch (e) {}
+      deferredPrompt = null;
+    } else {
+      // لا يوجد prompt (Safari / Firefox / بيئات معينة)
+      alert(
+        'لتثبيت التطبيق:\n\n' +
+        '• Android (Chrome/Samsung):\nقائمة ⋮ ← "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية"\n\n' +
+        '• iPhone (Safari):\nزر المشاركة ← "إضافة إلى الشاشة الرئيسية"\n\n' +
+        '• Windows (Edge/Chrome):\nأيقونة التثبيت في شريط العنوان'
+      );
+    }
+  });
+
+  // إغلاق البانر
+  closeBtn.addEventListener('click', () => {
+    hideBanner();
+    try { localStorage.setItem('pwa_install_dismissed', '1'); } catch (e) {}
+  });
+
+  // إظهار يدوي للبانر في Safari أو عند غياب beforeinstallprompt
+  // (بدون prompt — لكن مع إمكانية التثبيت يدوياً)
+  if (!isStandalone && !wasDismissed && isHttp) {
+    const ua = navigator.userAgent;
+    const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+    const isMobile = /android|iphone|ipad|ipod/i.test(ua);
+    if (isSafari || isMobile) {
+      // نتحقق مجدداً بعد فترة لتفادي الوميض
+      setTimeout(() => {
+        if (!deferredPrompt && !isStandalone) showBanner();
+      }, 1500);
+    }
+  }
+})();
+
+
+/* =========================================================================
+   منطق التطبيق — تحويل الصور
+   ========================================================================= */
+(function () {
+  'use strict';
+
+  const state = { images: [], mode: 'grayscale', size: 150 };
+  let nextId = 1;
+  let updateTimer = null;
+  let updateToken = 0;
+  let busy = false;
+  let overlayOwner = null;
+
+  const MIN_SIZE = 32, MAX_SIZE = 240, DEFAULT_SIZE = 150;
+  const SUPPORTED_EXT = ['png','jpg','jpeg','webp','gif','bmp','avif','svg'];
+  const IGNORED_NAMES = ['thumbs.db','desktop.ini','.ds_store','.gitignore','readme.txt'];
+
+  const $ = (s) => document.querySelector(s);
+  const els = {
+    folderInput: $('#folderInput'), fileInput: $('#fileInput'), dropZone: $('#dropZone'),
+    gallery: $('#gallery'), gallerySection: $('#gallerySection'), countBadge: $('#countBadge'),
+    clearAll: $('#clearAll'), modeBtns: Array.from(document.querySelectorAll('.mode-btn')),
+    sizeRange: $('#sizeRange'), sizeValue: $('#sizeValue'), downloadAll: $('#downloadAll'),
+    overlay: $('#overlay'), overlayTitle: $('#overlayTitle'), overlayBar: $('#overlayBar'),
+    overlayCount: $('#overlayCount'), toast: $('#toast')
+  };
+
+  const nextFrame = () => new Promise((r) => setTimeout(r, 0));
+  const toPngName = (name) => {
+    const i = name.lastIndexOf('.');
+    return (i > 0 ? name.slice(0, i) : name) + '.png';
+  };
+
+  function isSupportedImage(file) {
+    const name = file.name || '';
+    if (!name) return false;
+    if (name.startsWith('.')) return false;
+    const lower = name.toLowerCase();
+    if (IGNORED_NAMES.includes(lower)) return false;
+    if (lower.includes('__macosx')) return false;
+    if (file.type) return file.type.startsWith('image/');
+    const ext = lower.includes('.') ? lower.split('.').pop() : '';
+    return SUPPORTED_EXT.includes(ext);
+  }
+
+  let toastTimer = null;
+  function showToast(html) {
+    els.toast.innerHTML = html;
+    els.toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => els.toast.classList.remove('show'), 2800);
+  }
+
+  function showProgress(title, owner) {
+    overlayOwner = owner;
+    els.overlayTitle.textContent = title;
+    els.overlayBar.style.width = '0%';
+    els.overlayCount.textContent = '';
+    els.overlay.classList.remove('hidden');
+  }
+  function setProgress(done, total, owner) {
+    if (overlayOwner !== owner) return;
+    const pct = total ? (done / total) * 100 : 0;
+    els.overlayBar.style.width = pct + '%';
+    els.overlayCount.textContent = done + ' / ' + total;
+  }
+  function hideProgress(owner) {
+    if (overlayOwner !== owner) return;
+    els.overlay.classList.add('hidden');
+    overlayOwner = null;
+  }
+
+  function buildCanvas(item, mode, size) {
+    const canvas = document.createElement('canvas');
+    canvas.width = size; canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.filter = (mode === 'grayscale') ? 'grayscale(1)' : 'saturate(0.42)';
+    const scale = Math.min(size / item.width, size / item.height);
+    const w = item.width * scale, h = item.height * scale;
+    const x = (size - w) / 2, y = (size - h) / 2;
+    ctx.drawImage(item.img, x, y, w, h);
+    return canvas;
+  }
+
+  async function processItem(item, mode, size) {
+    if (!item.img) return null;
+    if (item.pngBlob && item.processedMode === mode && item.processedSize === size) {
+      return item.pngBlob;
+    }
+    const canvas = buildCanvas(item, mode, size);
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+    if (!blob) return null;
+    if (item.previewUrl) URL.revokeObjectURL(item.previewUrl);
+    item.pngBlob = blob;
+    item.previewUrl = URL.createObjectURL(blob);
+    item.processedMode = mode;
+    item.processedSize = size;
+    return blob;
+  }
+
+  function createCard(item) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML =
+      '<button class="remove" type="button" title="إزالة" aria-label="إزالة">×</button>' +
+      '<div class="thumb"><img alt="" style="opacity:.25"></div>' +
+      '<div class="meta">' +
+        '<div class="fname"></div>' +
+        '<button class="dl" type="button">تحميل PNG</button>' +
+      '</div>';
+    const nameEl = card.querySelector('.fname');
+    nameEl.textContent = item.name;
+    nameEl.title = item.name;
+    item.el = card;
+    item.previewEl = card.querySelector('.thumb img');
+    card.querySelector('.remove').addEventListener('click', () => removeItem(item));
+    card.querySelector('.dl').addEventListener('click', () => downloadItem(item));
+    els.gallery.appendChild(card);
+  }
+
+  function removeItem(item) {
+    if (item.previewUrl) URL.revokeObjectURL(item.previewUrl);
+    if (item.el) item.el.remove();
+    state.images = state.images.filter((x) => x !== item);
+    updateChrome();
+  }
+
+  function updateChrome() {
+    const n = state.images.length;
+    els.countBadge.textContent = n;
+    els.gallerySection.hidden = n === 0;
+    els.clearAll.hidden = n === 0;
+    els.downloadAll.disabled = (n === 0) || busy;
+  }
+
+  function addFiles(fileList) {
+    const all = Array.from(fileList || []);
+    const total = all.length;
+    const supported = all.filter(isSupportedImage);
+    const skipped = total - supported.length;
+    if (!supported.length) {
+      showToast('لم يتم العثور على صور مدعومة' + (skipped ? ' — تم تجاهل ' + skipped + ' ملف' : ''));
+      return;
+    }
+    let loaded = 0;
+    for (const file of supported) {
+      const item = {
+        id: nextId++, name: file.name, img: null, width: 0, height: 0,
+        pngBlob: null, previewUrl: null, processedMode: null, processedSize: null,
+        el: null, previewEl: null
+      };
+      state.images.push(item);
+      createCard(item);
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.decoding = 'async';
+      img.onload = () => {
+        item.img = img;
+        item.width = img.naturalWidth || 1;
+        item.height = img.naturalHeight || 1;
+        URL.revokeObjectURL(url);
+        loaded++;
+        if (loaded === supported.length) {
+          const msg = 'تم استيراد <span class="num">' + supported.length + '</span> صورة' +
+                      (skipped ? ' — تجاهل <span class="num">' + skipped + '</span> ملف غير مدعوم' : '');
+          showToast(msg);
+          scheduleUpdate();
+        }
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        removeItem(item);
+        loaded++;
+        if (loaded === supported.length) scheduleUpdate();
+      };
+      img.src = url;
+    }
+    updateChrome();
+  }
+
+  function scheduleUpdate() {
+    clearTimeout(updateTimer);
+    updateTimer = setTimeout(refreshPreviews, 60);
+  }
+
+  async function refreshPreviews() {
+    if (busy) return;
+    const token = ++updateToken;
+    const mode = state.mode, size = state.size;
+    const items = state.images.slice();
+    const total = items.length;
+    const withBar = total > 30;
+    let done = 0;
+    if (withBar) showProgress('تحديث المعاينات…', 'refresh');
+    for (const item of items) {
+      if (token !== updateToken || busy) { if (withBar) hideProgress('refresh'); return; }
+      if (!item.img) { done++; continue; }
+      await processItem(item, mode, size);
+      if (item.previewEl && item.previewUrl) {
+        item.previewEl.src = item.previewUrl;
+        item.previewEl.style.opacity = '1';
+      }
+      done++;
+      if (withBar) setProgress(done, total, 'refresh');
+      if (done % 3 === 0) await nextFrame();
+    }
+    if (withBar) hideProgress('refresh');
+  }
+
+  async function downloadItem(item) {
+    const blob = await processItem(item, state.mode, state.size);
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = toPngName(item.name);
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  }
+
+  async function downloadAll() {
+    const items = state.images.filter((i) => i.img);
+    if (!items.length || busy) return;
+    busy = true;
+    updateToken++;
+    els.downloadAll.disabled = true;
+    const mode = state.mode, size = state.size;
+    const files = [];
+    let done = 0;
+    showProgress('معالجة الدفعة…', 'batch');
+    try {
+      for (const item of items) {
+        const blob = await processItem(item, mode, size);
+        if (item.previewEl && item.previewUrl) {
+          item.previewEl.src = item.previewUrl;
+          item.previewEl.style.opacity = '1';
+        }
+        if (blob) {
+          files.push({
+            name: toPngName(item.name),
+            data: new Uint8Array(await blob.arrayBuffer())
+          });
+        }
+        done++;
+        setProgress(done, items.length, 'batch');
+        if (done % 2 === 0) await nextFrame();
+      }
+      els.overlayTitle.textContent = 'جارٍ إنشاء Imgs.zip…';
+      await nextFrame();
+      const zipBlob = buildZip(files);
+      const url = URL.createObjectURL(zipBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Imgs.zip';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 20000);
+    } finally {
+      hideProgress('batch');
+      busy = false;
+      updateChrome();
+    }
+  }
+
+  /* ---- ZIP writer ---- */
+  const CRC_TABLE = (function () {
+    const t = new Uint32Array(256);
+    for (let n = 0; n < 256; n++) {
+      let c = n;
+      for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      t[n] = c >>> 0;
+    }
+    return t;
+  })();
+  function crc32(bytes) {
+    let c = 0xFFFFFFFF;
+    for (let i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+  function buildZip(entries) {
+    const encoder = new TextEncoder();
+    const parts = [], central = [];
+    let offset = 0;
+    for (const entry of entries) {
+      const nameBytes = encoder.encode(entry.name);
+      const data = entry.data;
+      const crc = crc32(data);
+      const size = data.length;
+
+      const lfh = new Uint8Array(30 + nameBytes.length);
+      const lv = new DataView(lfh.buffer);
+      lv.setUint32(0, 0x04034b50, true);
+      lv.setUint16(4, 20, true); lv.setUint16(6, 0x0800, true);
+      lv.setUint16(8, 0, true); lv.setUint16(10, 0, true); lv.setUint16(12, 0, true);
+      lv.setUint32(14, crc, true);
+      lv.setUint32(18, size, true); lv.setUint32(22, size, true);
+      lv.setUint16(26, nameBytes.length, true); lv.setUint16(28, 0, true);
+      lfh.set(nameBytes, 30);
+      parts.push(lfh, data);
+
+      const cd = new Uint8Array(46 + nameBytes.length);
+      const cv = new DataView(cd.buffer);
+      cv.setUint32(0, 0x02014b50, true);
+      cv.setUint16(4, 20, true); cv.setUint16(6, 20, true); cv.setUint16(8, 0x0800, true);
+      cv.setUint16(10, 0, true); cv.setUint16(12, 0, true); cv.setUint16(14, 0, true);
+      cv.setUint32(16, crc, true);
+      cv.setUint32(20, size, true); cv.setUint32(24, size, true);
+      cv.setUint16(28, nameBytes.length, true);
+      cv.setUint16(30, 0, true); cv.setUint16(32, 0, true);
+      cv.setUint16(34, 0, true); cv.setUint16(36, 0, true);
+      cv.setUint32(38, 0, true); cv.setUint32(42, offset, true);
+      cd.set(nameBytes, 46);
+      central.push(cd);
+      offset += lfh.length + size;
+    }
+
+    const centralStart = offset;
+    let centralSize = 0;
+    for (const cd of central) { parts.push(cd); centralSize += cd.length; }
+
+    const eocd = new Uint8Array(22);
+    const ev = new DataView(eocd.buffer);
+    ev.setUint32(0, 0x06054b50, true);
+    ev.setUint16(8, entries.length, true);
+    ev.setUint16(10, entries.length, true);
+    ev.setUint32(12, centralSize, true);
+    ev.setUint32(16, centralStart, true);
+    parts.push(eocd);
+
+    return new Blob(parts, { type: 'application/zip' });
+  }
+
+  /* ---- Events ---- */
+  els.folderInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files.length) addFiles(e.target.files);
+    e.target.value = '';
+  });
+  els.fileInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files.length) addFiles(e.target.files);
+    e.target.value = '';
+  });
+
+  ['dragenter','dragover'].forEach((ev) => {
+    els.dropZone.addEventListener(ev, (e) => { e.preventDefault(); els.dropZone.classList.add('dragover'); });
+  });
+  ['dragleave','dragend','drop'].forEach((ev) => {
+    els.dropZone.addEventListener(ev, (e) => { e.preventDefault(); els.dropZone.classList.remove('dragover'); });
+  });
+  els.dropZone.addEventListener('drop', (e) => {
+    if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
+  });
+  document.addEventListener('dragover', (e) => e.preventDefault());
+  document.addEventListener('drop', (e) => e.preventDefault());
+
+  els.modeBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.mode;
+      if (state.mode === mode) return;
+      state.mode = mode;
+      els.modeBtns.forEach((b) => b.classList.toggle('active', b === btn));
+      scheduleUpdate();
+    });
+  });
+
+  function updateSizeUI() {
+    els.sizeValue.textContent = state.size + ' px';
+    const pct = ((state.size - MIN_SIZE) / (MAX_SIZE - MIN_SIZE)) * 100;
+    els.sizeRange.style.setProperty('--fill', pct + '%');
+  }
+  els.sizeRange.addEventListener('input', () => {
+    const v = parseInt(els.sizeRange.value, 10);
+    state.size = isNaN(v) ? DEFAULT_SIZE : Math.min(MAX_SIZE, Math.max(MIN_SIZE, v));
+    updateSizeUI();
+    scheduleUpdate();
+  });
+
+  els.downloadAll.addEventListener('click', downloadAll);
+  els.clearAll.addEventListener('click', () => {
+    if (!state.images.length) return;
+    state.images.forEach((i) => { if (i.previewUrl) URL.revokeObjectURL(i.previewUrl); });
+    state.images = [];
+    els.gallery.innerHTML = '';
+    updateChrome();
+  });
+
+  updateSizeUI();
+  updateChrome();
+})();
+</script>
+</body>
+</html>
