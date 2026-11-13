@@ -2,7 +2,7 @@
    استراتيجية: Cache-First مع إعادة التخزين الديناميكي
    يجعل التطبيق يعمل بدون إنترنت بعد أول زيارة.
 */
-const CACHE_NAME = 'imgs-converter-v1';
+const CACHE_NAME = 'imgs-converter-v2';
 const PRECACHE = ['./', './index.html'];
 
 self.addEventListener('install', (event) => {
