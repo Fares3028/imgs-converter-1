@@ -27,13 +27,10 @@
 
   /* ---------- Install banner ---------- */
   .install-banner{
-    display:none;
-    position:sticky;top:0;z-index:30;
+    display:none; position:sticky; top:0; z-index:30;
     background:linear-gradient(90deg,#1e1500,#221800);
-    border-bottom:1px solid rgba(255,176,32,.25);
-    padding:10px 14px;
-    padding-top:calc(10px + env(safe-area-inset-top));
-    align-items:center;gap:10px;
+    border-bottom:1px solid rgba(255,176,32,.25); padding:10px 14px;
+    padding-top:calc(10px + env(safe-area-inset-top)); align-items:center; gap:10px;
     box-shadow:0 2px 12px rgba(0,0,0,.35);
   }
   .install-banner.show{display:flex}
@@ -44,11 +41,9 @@
     border:0;background:linear-gradient(180deg,var(--accent),var(--accent-2));
     color:#1a1206;font-family:inherit;font-weight:800;font-size:.82rem;
     padding:10px 16px;border-radius:10px;cursor:pointer;white-space:nowrap;
-    box-shadow:0 3px 10px rgba(255,140,0,.28);
   }
   .install-banner .ib-close{
-    background:transparent;color:var(--muted);box-shadow:none;
-    padding:6px 10px;font-size:1rem;font-weight:400;
+    background:transparent;color:var(--muted);padding:6px 10px;font-size:1rem;
   }
 
   /* ---------- Header ---------- */
@@ -58,7 +53,7 @@
   h1 .pill{
     font-size:.6rem;vertical-align:middle;background:rgba(255,176,32,.14);
     color:var(--accent);border:1px solid rgba(255,176,32,.3);
-    padding:3px 8px;border-radius:999px;font-weight:700;margin-inline-start:4px;letter-spacing:0;
+    padding:3px 8px;border-radius:999px;font-weight:700;margin-inline-start:4px;
   }
   .sub{margin:0;color:var(--muted);font-size:.85rem}
 
@@ -71,7 +66,7 @@
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
     border:2px dashed var(--border);border-radius:var(--radius);
     padding:26px 16px;text-align:center;user-select:none;
-    transition:border-color .2s,background .2s;
+    transition:border-color .2s,background .2s; cursor:pointer;
   }
   .drop-zone.dragover{border-color:var(--accent);background:rgba(255,176,32,.05)}
   .drop-zone svg{width:36px;height:36px;stroke:var(--accent);fill:none;stroke-width:1.8;margin-bottom:2px}
@@ -88,7 +83,6 @@
     transition:border-color .18s,background .18s,transform .12s;text-align:right;
   }
   .import-btn:hover{border-color:var(--accent);background:#232833}
-  .import-btn:active{transform:scale(.985)}
   .import-btn .ico{
     flex:0 0 40px;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;
     background:rgba(255,176,32,.14);color:var(--accent);
@@ -105,17 +99,6 @@
     color:#a9c4e6;font-size:.75rem;line-height:1.6;
   }
   .import-note b{color:#60a5fa}
-
-  /* ---------- Toast ---------- */
-  .toast{
-    position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);
-    background:#1f2630;border:1px solid var(--border);color:var(--text);
-    padding:12px 18px;border-radius:12px;font-size:.85rem;font-weight:600;
-    box-shadow:0 10px 30px rgba(0,0,0,.5);z-index:60;opacity:0;
-    transition:opacity .25s,transform .25s;pointer-events:none;max-width:90vw;text-align:center;
-  }
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-  .toast .num{color:var(--accent);font-weight:800}
 
   /* ---------- Controls ---------- */
   .field + .field{margin-top:16px}
@@ -151,19 +134,64 @@
     width:18px;height:18px;border-radius:50%;background:var(--accent);
     border:3px solid #14181f;cursor:pointer;box-shadow:0 0 0 1px var(--accent);
   }
-  input[type="range"]::-moz-range-track{height:6px;border-radius:999px;background:var(--panel-2)}
-  .range-ends{display:flex;justify-content:space-between;margin-top:6px;color:var(--muted);font-size:.72rem;font-variant-numeric:tabular-nums}
+  .range-ends{display:flex;justify-content:space-between;margin-top:6px;color:var(--muted);font-size:.72rem}
 
-  /* ---------- Primary button ---------- */
+  /* ---------- Miyoo Simulator ---------- */
+  .miyoo-toggle{
+    width:100%; padding:12px; background:var(--panel-2); border:1px solid var(--border);
+    border-radius:12px; color:var(--text); font-family:inherit; font-weight:600;
+    font-size:.9rem; cursor:pointer; margin-top:12px; display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .miyoo-toggle:hover { border-color: var(--accent); }
+  
+  .miyoo-container {
+    display:none; margin-top:16px; justify-content:center;
+  }
+  .miyoo-container.show { display:flex; }
+  
+  .miyoo-device {
+    background:#2a2d35; border-radius:20px 20px 40px 40px;
+    width: 100%; max-width: 340px; padding: 18px 14px 30px;
+    box-shadow: inset 0 2px 5px rgba(255,255,255,0.1), 0 10px 25px rgba(0,0,0,0.5);
+    border: 2px solid #3c414d; position:relative;
+  }
+  .miyoo-screen-bezel {
+    background:#000; border-radius:8px; padding:12px;
+    border: 2px solid #111; box-shadow: inset 0 0 10px rgba(0,0,0,1);
+  }
+  .miyoo-screen {
+    background:#1e2126; aspect-ratio: 4/3; width:100%;
+    border-radius:4px; display:grid; grid-template-columns:repeat(3, 1fr);
+    grid-template-rows:repeat(2, 1fr); gap:6px; padding:8px;
+    overflow:hidden;
+  }
+  .miyoo-game {
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+  }
+  .miyoo-game img {
+    width: 60%; aspect-ratio:1/1; object-fit:contain; border-radius:4px;
+    background:#000; border:1px solid #333;
+  }
+  .miyoo-game span {
+    color:#fff; font-size:0.45rem; text-align:center; width:100%;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; opacity:0.8;
+  }
+  .miyoo-brand {
+    text-align:center; color:#5c6370; font-size:0.6rem; font-weight:700;
+    letter-spacing:2px; margin-top:15px; margin-bottom:-10px;
+  }
+
+  /* ---------- Batch & Download ---------- */
   .btn-primary{
     width:100%;padding:16px;border:0;border-radius:14px;font-family:inherit;
     background:linear-gradient(180deg,var(--accent),var(--accent-2));
     color:#191204;font-weight:800;font-size:1rem;cursor:pointer;
     box-shadow:0 8px 24px rgba(255,140,0,.22);
-    transition:transform .12s,box-shadow .12s,opacity .2s;
+    transition:transform .12s, box-shadow .12s, opacity .2s;
   }
   .btn-primary:active{transform:scale(.985)}
   .btn-primary:disabled{opacity:.4;box-shadow:none;cursor:not-allowed}
+  .batch-note { text-align:center; font-size:0.75rem; color:var(--muted); margin-top:-6px; }
 
   /* ---------- Gallery ---------- */
   .gallery-section{display:flex;flex-direction:column;gap:12px}
@@ -173,7 +201,6 @@
   .count-badge{
     background:var(--panel-2);border:1px solid var(--border);color:var(--muted);
     font-size:.75rem;padding:2px 9px;border-radius:999px;font-weight:700;
-    font-variant-numeric:tabular-nums;
   }
   .link-btn{background:none;border:0;color:var(--muted);font-family:inherit;font-size:.8rem;cursor:pointer;text-decoration:underline;padding:4px}
   .link-btn:hover{color:#ff6b6b}
@@ -195,22 +222,20 @@
   .meta{padding:8px;display:flex;flex-direction:column;gap:6px}
   .fname{
     font-size:.76rem;color:var(--muted);white-space:nowrap;overflow:hidden;
-    text-overflow:ellipsis;direction:ltr;text-align:left;font-variant-numeric:tabular-nums;
+    text-overflow:ellipsis;direction:ltr;text-align:left;
   }
   .dl{border:0;background:var(--panel-2);color:var(--text);border-radius:8px;padding:9px;font-size:.8rem;font-family:inherit;cursor:pointer;font-weight:600;transition:background .15s}
   .dl:hover{background:#2b3140}
   .remove{
     position:absolute;top:6px;left:6px;width:24px;height:24px;border-radius:50%;
     border:0;background:rgba(0,0,0,.6);color:#fff;cursor:pointer;font-size:16px;
-    line-height:1;display:grid;place-items:center;z-index:2;
-    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+    line-height:1;display:grid;place-items:center;z-index:2;backdrop-filter:blur(4px);
   }
   .remove:hover{background:rgba(220,50,50,.85)}
 
   /* ---------- Progress overlay ---------- */
   .overlay{
-    position:fixed;inset:0;background:rgba(8,9,12,.8);
-    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    position:fixed;inset:0;background:rgba(8,9,12,.8); backdrop-filter:blur(6px);
     display:grid;place-items:center;z-index:50;padding:20px;
   }
   .overlay.hidden{display:none}
@@ -220,22 +245,31 @@
   .bar-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .15s ease}
   #overlayCount{color:var(--muted);font-size:.78rem;font-variant-numeric:tabular-nums}
 
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);
+    background:#1f2630;border:1px solid var(--border);color:var(--text);
+    padding:12px 18px;border-radius:12px;font-size:.85rem;font-weight:600;
+    box-shadow:0 10px 30px rgba(0,0,0,.5);z-index:60;opacity:0;
+    transition:opacity .25s,transform .25s;pointer-events:none;max-width:90vw;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast .num{color:var(--accent);font-weight:800}
+
   footer{padding:20px 16px 44px;text-align:center;color:var(--muted);font-size:.74rem;line-height:1.9;padding-bottom:calc(44px + env(safe-area-inset-bottom))}
   footer p{margin:0}
 
   @media (min-width:640px){
     h1{font-size:1.8rem}
     .gallery{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
-    main{padding-bottom:60px}
   }
 </style>
 </head>
 <body>
 
-<!-- شريط تثبيت PWA (يظهر تلقائياً عند الإمكان) -->
-<div class="install-banner" id="installBanner" role="region" aria-label="تثبيت التطبيق">
+<div class="install-banner" id="installBanner">
   <div class="ib-text">
-    <strong>ثبّت Imgs Converter</strong>
+    <strong>ثبت Imgs Converter</strong>
     <span>افتحه كتطبيق مستقل يعمل بدون إنترنت</span>
   </div>
   <button type="button" id="installBtn">تثبيت</button>
@@ -249,54 +283,36 @@
 </header>
 
 <main>
-  <!-- رفع الصور -->
+  <!-- استيراد الصور -->
   <section class="panel">
     <div class="drop-zone" id="dropZone">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 16V4m0 0L8 8m4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke-linecap="round"/>
-      </svg>
+      <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L8 8m4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke-linecap="round"/></svg>
       <p class="dz-title">اسحب الصور وأفلتها هنا</p>
       <p class="dz-sub">أو استخدم أحد الخيارات أدناه</p>
     </div>
 
     <div class="import-buttons">
       <label class="import-btn folder" for="folderInput">
-        <span class="ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
-        </span>
-        <span class="import-text">
-          <strong>اختيار مجلد الصور</strong>
-          <span>استيراد الصور من مجلد كامل</span>
-        </span>
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg></span>
+        <span class="import-text"><strong>اختيار مجلد الصور</strong><span>استيراد الصور من مجلد كامل</span></span>
       </label>
-
       <label class="import-btn" for="fileInput">
-        <span class="ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
-        </span>
-        <span class="import-text">
-          <strong>اختيار صور متعددة</strong>
-          <span>تحديد صور منفردة من الملفات</span>
-        </span>
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span>
+        <span class="import-text"><strong>اختيار صور متعددة</strong><span>تحديد صور منفردة من الملفات</span></span>
       </label>
     </div>
-
-    <p class="import-note">
-      💡 <b>ملاحظة:</b> على كمبيوتر Chrome/Edge يمكنك اختيار المجلد كاملاً مباشرة.
-      على الجوال، بعض المتصفحات لا تدعم استيراد مجلد — استخدم «اختيار صور متعددة» من داخل المجلد بدلاً من ذلك.
-    </p>
+    <p class="import-note">💡 <b>ملاحظة:</b> على كمبيوتر Chrome/Edge يمكنك اختيار المجلد كاملاً. على الجوال استخدم «اختيار صور متعددة» لتحديد صور من داخل المجلد.</p>
 
     <input type="file" id="folderInput" webkitdirectory directory multiple hidden>
     <input type="file" id="fileInput" accept="image/*" multiple hidden>
   </section>
 
-  <!-- نمط + حجم -->
+  <!-- الإعدادات والمحاكاة -->
   <section class="panel">
     <div class="field">
       <div class="field-head"><label>نمط التحويل</label></div>
-      <div class="segmented" role="group" aria-label="نمط التحويل">
-        <button type="button" class="mode-btn active" data-mode="grayscale">رمادي كامل</button>
+      <div class="segmented" role="group">
+        <button type="button" class="mode-btn" data-mode="grayscale">رمادي كامل</button>
         <button type="button" class="mode-btn" data-mode="faded">ألوان باهتة</button>
       </div>
     </div>
@@ -308,9 +324,28 @@
       <input type="range" id="sizeRange" min="32" max="240" step="1" value="150">
       <div class="range-ends"><span>32</span><span>240</span></div>
     </div>
+
+    <!-- محاكاة Miyoo Mini -->
+    <button class="miyoo-toggle" id="toggleMiyooBtn" type="button">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="6" y1="8" x2="6.01" y2="8"></line><line x1="10" y1="8" x2="10.01" y2="8"></line><line x1="14" y1="8" x2="14.01" y2="8"></line><line x1="18" y1="8" x2="18.01" y2="8"></line><line x1="6" y1="12" x2="18" y2="12"></line><line x1="6" y1="16" x2="18" y2="16"></line></svg>
+      عرض محاكاة شاشة Miyoo Mini
+    </button>
+
+    <div class="miyoo-container" id="miyooContainer">
+      <div class="miyoo-device">
+        <div class="miyoo-screen-bezel">
+          <div class="miyoo-screen" id="miyooScreen">
+            <!-- سيتم حقن أول 6 صور هنا -->
+            <div style="grid-column: 1/-1; display:flex; align-items:center; justify-content:center; color:#555; font-size:0.8rem;">لا توجد صور بعد</div>
+          </div>
+        </div>
+        <div class="miyoo-brand">MIYOO</div>
+      </div>
+    </div>
   </section>
 
-  <button class="btn-primary" id="downloadAll" type="button" disabled>تحميل الكل — Imgs.zip</button>
+  <button class="btn-primary" id="downloadAll" type="button" disabled>تصدير Imgs.zip (متوافق مع OnionOS)</button>
+  <p class="batch-note" id="batchNote">يقوم بمعالجة جميع الصور دفعة واحدة وتجهيزها للتحميل.</p>
 
   <section class="gallery-section" id="gallerySection" hidden>
     <div class="section-head">
@@ -326,7 +361,7 @@
   <p>لا حاجة لحساب مستخدم · لا يتم تخزين الصور · تُحرَّر الصور داخل ذاكرة المتصفح فقط.</p>
 </footer>
 
-<div class="overlay hidden" id="overlay" role="status" aria-live="polite">
+<div class="overlay hidden" id="overlay">
   <div class="overlay-card">
     <p id="overlayTitle">معالجة الدفعة…</p>
     <div class="bar"><div class="bar-fill" id="overlayBar"></div></div>
@@ -338,189 +373,76 @@
 
 <script>
 /* =========================================================================
-   PWA: توليد الأيقونات + manifest + تسجيل SW + زر التثبيت
+   PWA: التثبيت والأيقونات
    ========================================================================= */
 (function setupPWA() {
   'use strict';
-
-  /* ---- 1) توليد الأيقونات (كانفاس + إيموجي) ---- */
   function generateIcon(size) {
     const canvas = document.createElement('canvas');
     canvas.width = canvas.height = size;
     const ctx = canvas.getContext('2d');
-
-    // خلفية متدرجة ملء الإطار (متوافق مع maskable)
     const grd = ctx.createLinearGradient(0, 0, size, size);
-    grd.addColorStop(0, '#ffb020');
-    grd.addColorStop(1, '#ff8a00');
-    ctx.fillStyle = grd;
-    ctx.fillRect(0, 0, size, size);
-
-    // الإيموجي في المنتصف (55% — داخل المنطقة الآمنة)
-    ctx.font = `${Math.round(size * 0.55)}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+    grd.addColorStop(0, '#ffb020'); grd.addColorStop(1, '#ff8a00');
+    ctx.fillStyle = grd; ctx.fillRect(0, 0, size, size);
+    ctx.font = `${Math.round(size * 0.55)}px "Segoe UI Emoji", sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText('🧅', size / 2, size * 0.54);
-
     return canvas.toDataURL('image/png');
   }
 
-  /* ---- 2) بناء manifest.json في وقت التشغيل ---- */
-  function buildManifest() {
-    const icon192 = generateIcon(192);
-    const icon512 = generateIcon(512);
-
-    const manifest = {
-      name: 'Imgs Converter – OnionOS',
-      short_name: 'Imgs Converter',
-      description: 'أداة لتحويل صور الألعاب وتجهيزها لنظام OnionOS على Miyoo Mini',
-      lang: 'ar',
-      dir: 'rtl',
-      start_url: '.',
-      scope: '.',
-      display: 'standalone',
-      display_override: ['standalone', 'minimal-ui'],
-      orientation: 'portrait-primary',
-      background_color: '#0e1014',
-      theme_color: '#0e1014',
-      categories: ['utilities', 'photo', 'games'],
-      icons: [
-        { src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any' },
-        { src: icon192, sizes: '192x192', type: 'image/png', purpose: 'maskable' },
-        { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any' },
-        { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }
-      ]
-    };
-
-    const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
-    return URL.createObjectURL(blob);
-  }
-
-  // حقن manifest + أيقونة Apple
   try {
     const icon192 = generateIcon(192);
+    const manifest = {
+      name: 'Imgs Converter – OnionOS', short_name: 'Imgs Converter',
+      start_url: '.', scope: '.', display: 'standalone', orientation: 'portrait',
+      background_color: '#0e1014', theme_color: '#0e1014',
+      icons: [{ src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any maskable' }]
+    };
     const link = document.createElement('link');
     link.rel = 'manifest';
-    link.href = buildManifest();
+    link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' }));
     document.head.appendChild(link);
+  } catch (e) {}
 
-    const appleLink = document.createElement('link');
-    appleLink.rel = 'apple-touch-icon';
-    appleLink.href = icon192;
-    document.head.appendChild(appleLink);
-  } catch (e) {
-    console.warn('PWA manifest setup failed:', e);
-  }
-
-  /* ---- 3) تسجيل Service Worker (يعمل فقط عند الاستضافة عبر HTTPS/http) ---- */
   const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
   if ('serviceWorker' in navigator && isHttp) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('service-worker.js', { scope: './' })
-        .then((reg) => {
-          console.log('[PWA] Service Worker ready:', reg.scope);
-          // فحص التحديثات
-          reg.addEventListener('updatefound', () => {
-            const nw = reg.installing;
-            if (!nw) return;
-            nw.addEventListener('statechange', () => {
-              if (nw.state === 'installed' && navigator.serviceWorker.controller) {
-                // تحديث متاح — نطبّقه بصمت في الزيارة القادمة
-                console.log('[PWA] تحديث جاهز — سيُفعّل عند إعادة الفتح');
-              }
-            });
-          });
-        })
-        .catch((err) => {
-          console.warn('[PWA] SW registration failed:', err.message);
-        });
-    });
+    window.addEventListener('load', () => navigator.serviceWorker.register('service-worker.js', { scope: './' }).catch(()=>{}));
   }
 
-  /* ---- 4) زر التثبيت ---- */
   const banner = document.getElementById('installBanner');
   const installBtn = document.getElementById('installBtn');
-  const closeBtn = document.getElementById('installClose');
   let deferredPrompt = null;
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-  // إخفاء إذا كان التطبيق مثبتاً/مفتوحاً في وضع standalone
-  const isStandalone =
-    window.matchMedia('(display-mode: standalone)').matches ||
-    window.navigator.standalone === true;
-
-  const wasDismissed = localStorage.getItem('pwa_install_dismissed') === '1';
-
-  function showBanner() {
-    if (isStandalone || wasDismissed) return;
-    banner.classList.add('show');
-  }
-  function hideBanner() {
-    banner.classList.remove('show');
+  if (!isStandalone && localStorage.getItem('pwa_dismissed') !== '1') {
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; banner.classList.add('show'); });
   }
 
-  // Chrome/Edge/Android: حدث التثبيت الرسمي
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    showBanner();
-  });
-
-  // بعد التثبيت الناجح
-  window.addEventListener('appinstalled', () => {
-    deferredPrompt = null;
-    hideBanner();
-    try { localStorage.setItem('pwa_install_dismissed', '1'); } catch (e) {}
-  });
-
-  // الضغط على "تثبيت"
   installBtn.addEventListener('click', async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      try {
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') hideBanner();
-      } catch (e) {}
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') banner.classList.remove('show');
       deferredPrompt = null;
-    } else {
-      // لا يوجد prompt (Safari / Firefox / بيئات معينة)
-      alert(
-        'لتثبيت التطبيق:\n\n' +
-        '• Android (Chrome/Samsung):\nقائمة ⋮ ← "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية"\n\n' +
-        '• iPhone (Safari):\nزر المشاركة ← "إضافة إلى الشاشة الرئيسية"\n\n' +
-        '• Windows (Edge/Chrome):\nأيقونة التثبيت في شريط العنوان'
-      );
-    }
+    } else { alert('لتثبيت التطبيق:\nChrome/Android: قائمة ⋮ ← تثبيت التطبيق.\niPhone: مشاركة ← إضافة إلى الشاشة الرئيسية.'); }
   });
-
-  // إغلاق البانر
-  closeBtn.addEventListener('click', () => {
-    hideBanner();
-    try { localStorage.setItem('pwa_install_dismissed', '1'); } catch (e) {}
-  });
-
-  // إظهار يدوي للبانر في Safari أو عند غياب beforeinstallprompt
-  // (بدون prompt — لكن مع إمكانية التثبيت يدوياً)
-  if (!isStandalone && !wasDismissed && isHttp) {
-    const ua = navigator.userAgent;
-    const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
-    const isMobile = /android|iphone|ipad|ipod/i.test(ua);
-    if (isSafari || isMobile) {
-      // نتحقق مجدداً بعد فترة لتفادي الوميض
-      setTimeout(() => {
-        if (!deferredPrompt && !isStandalone) showBanner();
-      }, 1500);
-    }
-  }
+  
+  document.getElementById('installClose').addEventListener('click', () => { banner.classList.remove('show'); localStorage.setItem('pwa_dismissed', '1'); });
 })();
 
 
 /* =========================================================================
-   منطق التطبيق — تحويل الصور
+   منطق التطبيق - تحويل الصور والميزات الجديدة
    ========================================================================= */
 (function () {
   'use strict';
 
-  const state = { images: [], mode: 'grayscale', size: 150 };
+  const state = {
+    images: [],
+    mode: localStorage.getItem('imgs_mode') || 'grayscale',
+    size: parseInt(localStorage.getItem('imgs_size')) || 150
+  };
+
   let nextId = 1;
   let updateTimer = null;
   let updateToken = 0;
@@ -538,7 +460,8 @@
     clearAll: $('#clearAll'), modeBtns: Array.from(document.querySelectorAll('.mode-btn')),
     sizeRange: $('#sizeRange'), sizeValue: $('#sizeValue'), downloadAll: $('#downloadAll'),
     overlay: $('#overlay'), overlayTitle: $('#overlayTitle'), overlayBar: $('#overlayBar'),
-    overlayCount: $('#overlayCount'), toast: $('#toast')
+    overlayCount: $('#overlayCount'), toast: $('#toast'),
+    toggleMiyooBtn: $('#toggleMiyooBtn'), miyooContainer: $('#miyooContainer'), miyooScreen: $('#miyooScreen')
   };
 
   const nextFrame = () => new Promise((r) => setTimeout(r, 0));
@@ -549,14 +472,11 @@
 
   function isSupportedImage(file) {
     const name = file.name || '';
-    if (!name) return false;
-    if (name.startsWith('.')) return false;
+    if (!name || name.startsWith('.')) return false;
     const lower = name.toLowerCase();
-    if (IGNORED_NAMES.includes(lower)) return false;
-    if (lower.includes('__macosx')) return false;
+    if (IGNORED_NAMES.includes(lower) || lower.includes('__macosx')) return false;
     if (file.type) return file.type.startsWith('image/');
-    const ext = lower.includes('.') ? lower.split('.').pop() : '';
-    return SUPPORTED_EXT.includes(ext);
+    return SUPPORTED_EXT.includes(lower.split('.').pop());
   }
 
   let toastTimer = null;
@@ -576,8 +496,7 @@
   }
   function setProgress(done, total, owner) {
     if (overlayOwner !== owner) return;
-    const pct = total ? (done / total) * 100 : 0;
-    els.overlayBar.style.width = pct + '%';
+    els.overlayBar.style.width = (total ? (done / total) * 100 : 0) + '%';
     els.overlayCount.textContent = done + ' / ' + total;
   }
   function hideProgress(owner) {
@@ -586,51 +505,71 @@
     overlayOwner = null;
   }
 
+  /* ---- المعالجة (Canvas) ---- */
   function buildCanvas(item, mode, size) {
     const canvas = document.createElement('canvas');
     canvas.width = size; canvas.height = size;
     const ctx = canvas.getContext('2d');
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
     ctx.filter = (mode === 'grayscale') ? 'grayscale(1)' : 'saturate(0.42)';
     const scale = Math.min(size / item.width, size / item.height);
     const w = item.width * scale, h = item.height * scale;
-    const x = (size - w) / 2, y = (size - h) / 2;
-    ctx.drawImage(item.img, x, y, w, h);
+    ctx.drawImage(item.img, (size - w) / 2, (size - h) / 2, w, h);
     return canvas;
   }
 
   async function processItem(item, mode, size) {
     if (!item.img) return null;
-    if (item.pngBlob && item.processedMode === mode && item.processedSize === size) {
-      return item.pngBlob;
-    }
-    const canvas = buildCanvas(item, mode, size);
-    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+    if (item.pngBlob && item.processedMode === mode && item.processedSize === size) return item.pngBlob;
+    
+    const blob = await new Promise((res) => buildCanvas(item, mode, size).toBlob(res, 'image/png'));
     if (!blob) return null;
+    
     if (item.previewUrl) URL.revokeObjectURL(item.previewUrl);
     item.pngBlob = blob;
     item.previewUrl = URL.createObjectURL(blob);
-    item.processedMode = mode;
-    item.processedSize = size;
+    item.processedMode = mode; item.processedSize = size;
     return blob;
   }
 
+  /* ---- واجهة Miyoo ---- */
+  function renderMiyooSimulator() {
+    els.miyooScreen.innerHTML = '';
+    if (state.images.length === 0) {
+      els.miyooScreen.innerHTML = '<div style="grid-column: 1/-1; display:flex; align-items:center; justify-content:center; color:#555; font-size:0.8rem;">لا توجد صور بعد</div>';
+      return;
+    }
+    
+    // عرض أول 6 صور فقط لمحاكاة الشاشة
+    const displayImages = state.images.slice(0, 6);
+    displayImages.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'miyoo-game';
+      const img = document.createElement('img');
+      if (item.previewUrl) img.src = item.previewUrl;
+      const span = document.createElement('span');
+      span.textContent = item.name.replace(/\.[^/.]+$/, ""); // مسح الامتداد للعرض فقط
+      div.appendChild(img); div.appendChild(span);
+      els.miyooScreen.appendChild(div);
+    });
+  }
+
+  /* ---- إدارة البطاقات ---- */
   function createCard(item) {
     const card = document.createElement('div');
     card.className = 'card';
-    card.innerHTML =
-      '<button class="remove" type="button" title="إزالة" aria-label="إزالة">×</button>' +
-      '<div class="thumb"><img alt="" style="opacity:.25"></div>' +
-      '<div class="meta">' +
-        '<div class="fname"></div>' +
-        '<button class="dl" type="button">تحميل PNG</button>' +
-      '</div>';
+    card.innerHTML = `
+      <button class="remove" type="button" title="إزالة">×</button>
+      <div class="thumb"><img alt="" style="opacity:.25"></div>
+      <div class="meta">
+        <div class="fname"></div>
+        <button class="dl" type="button">تحميل PNG</button>
+      </div>`;
+    
     const nameEl = card.querySelector('.fname');
-    nameEl.textContent = item.name;
-    nameEl.title = item.name;
-    item.el = card;
-    item.previewEl = card.querySelector('.thumb img');
+    nameEl.textContent = item.name; nameEl.title = item.name;
+    item.el = card; item.previewEl = card.querySelector('.thumb img');
+
     card.querySelector('.remove').addEventListener('click', () => removeItem(item));
     card.querySelector('.dl').addEventListener('click', () => downloadItem(item));
     els.gallery.appendChild(card);
@@ -641,6 +580,7 @@
     if (item.el) item.el.remove();
     state.images = state.images.filter((x) => x !== item);
     updateChrome();
+    renderMiyooSimulator();
   }
 
   function updateChrome() {
@@ -653,49 +593,32 @@
 
   function addFiles(fileList) {
     const all = Array.from(fileList || []);
-    const total = all.length;
     const supported = all.filter(isSupportedImage);
-    const skipped = total - supported.length;
-    if (!supported.length) {
-      showToast('لم يتم العثور على صور مدعومة' + (skipped ? ' — تم تجاهل ' + skipped + ' ملف' : ''));
-      return;
-    }
+    const skipped = all.length - supported.length;
+    if (!supported.length) return showToast('لم يتم العثور على صور مدعومة.');
+
     let loaded = 0;
-    for (const file of supported) {
-      const item = {
-        id: nextId++, name: file.name, img: null, width: 0, height: 0,
-        pngBlob: null, previewUrl: null, processedMode: null, processedSize: null,
-        el: null, previewEl: null
-      };
-      state.images.push(item);
-      createCard(item);
+    supported.forEach(file => {
+      const item = { id: nextId++, name: file.name, img: null, width: 0, height: 0, pngBlob: null, previewUrl: null };
+      state.images.push(item); createCard(item);
+      
       const url = URL.createObjectURL(file);
       const img = new Image();
-      img.decoding = 'async';
       img.onload = () => {
-        item.img = img;
-        item.width = img.naturalWidth || 1;
-        item.height = img.naturalHeight || 1;
-        URL.revokeObjectURL(url);
-        loaded++;
+        item.img = img; item.width = img.naturalWidth; item.height = img.naturalHeight;
+        URL.revokeObjectURL(url); loaded++;
         if (loaded === supported.length) {
-          const msg = 'تم استيراد <span class="num">' + supported.length + '</span> صورة' +
-                      (skipped ? ' — تجاهل <span class="num">' + skipped + '</span> ملف غير مدعوم' : '');
-          showToast(msg);
+          showToast(`تم استيراد <span class="num">${supported.length}</span> صورة` + (skipped ? ` — تجاهل <span class="num">${skipped}</span> ملف` : ''));
           scheduleUpdate();
         }
       };
-      img.onerror = () => {
-        URL.revokeObjectURL(url);
-        removeItem(item);
-        loaded++;
-        if (loaded === supported.length) scheduleUpdate();
-      };
+      img.onerror = () => { URL.revokeObjectURL(url); removeItem(item); loaded++; if (loaded === supported.length) scheduleUpdate(); };
       img.src = url;
-    }
+    });
     updateChrome();
   }
 
+  /* ---- تحديث المعاينات ---- */
   function scheduleUpdate() {
     clearTimeout(updateTimer);
     updateTimer = setTimeout(refreshPreviews, 60);
@@ -704,207 +627,149 @@
   async function refreshPreviews() {
     if (busy) return;
     const token = ++updateToken;
-    const mode = state.mode, size = state.size;
     const items = state.images.slice();
-    const total = items.length;
-    const withBar = total > 30;
+    const withBar = items.length > 30;
     let done = 0;
     if (withBar) showProgress('تحديث المعاينات…', 'refresh');
+
     for (const item of items) {
       if (token !== updateToken || busy) { if (withBar) hideProgress('refresh'); return; }
       if (!item.img) { done++; continue; }
-      await processItem(item, mode, size);
+      
+      await processItem(item, state.mode, state.size);
       if (item.previewEl && item.previewUrl) {
-        item.previewEl.src = item.previewUrl;
-        item.previewEl.style.opacity = '1';
+        item.previewEl.src = item.previewUrl; item.previewEl.style.opacity = '1';
       }
+      
       done++;
-      if (withBar) setProgress(done, total, 'refresh');
+      if (withBar) setProgress(done, items.length, 'refresh');
       if (done % 3 === 0) await nextFrame();
     }
     if (withBar) hideProgress('refresh');
+    renderMiyooSimulator(); // تحديث محاكي Miyoo بعد اكتمال المعاينة
   }
 
+  /* ---- التحميل الفردي ---- */
   async function downloadItem(item) {
     const blob = await processItem(item, state.mode, state.size);
     if (!blob) return;
-    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url;
+    a.href = URL.createObjectURL(blob);
     a.download = toPngName(item.name);
-    document.body.appendChild(a);
     a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
   }
 
+  /* ---- معالجة الدفعة والتصدير ZIP ---- */
   async function downloadAll() {
     const items = state.images.filter((i) => i.img);
     if (!items.length || busy) return;
-    busy = true;
-    updateToken++;
-    els.downloadAll.disabled = true;
-    const mode = state.mode, size = state.size;
-    const files = [];
-    let done = 0;
-    showProgress('معالجة الدفعة…', 'batch');
+    busy = true; updateToken++; els.downloadAll.disabled = true;
+    
+    const files = []; let done = 0;
+    showProgress('معالجة الدفعة للتصدير…', 'batch');
+    
     try {
       for (const item of items) {
-        const blob = await processItem(item, mode, size);
-        if (item.previewEl && item.previewUrl) {
-          item.previewEl.src = item.previewUrl;
-          item.previewEl.style.opacity = '1';
-        }
+        const blob = await processItem(item, state.mode, state.size);
         if (blob) {
-          files.push({
-            name: toPngName(item.name),
-            data: new Uint8Array(await blob.arrayBuffer())
-          });
+          files.push({ name: toPngName(item.name), data: new Uint8Array(await blob.arrayBuffer()) });
         }
-        done++;
-        setProgress(done, items.length, 'batch');
+        done++; setProgress(done, items.length, 'batch');
         if (done % 2 === 0) await nextFrame();
       }
+      
       els.overlayTitle.textContent = 'جارٍ إنشاء Imgs.zip…';
       await nextFrame();
-      const zipBlob = buildZip(files);
-      const url = URL.createObjectURL(zipBlob);
+      
+      const url = URL.createObjectURL(buildZip(files));
       const a = document.createElement('a');
-      a.href = url;
-      a.download = 'Imgs.zip';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+      a.href = url; a.download = 'Imgs.zip';
+      document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 20000);
     } finally {
-      hideProgress('batch');
-      busy = false;
-      updateChrome();
+      hideProgress('batch'); busy = false; updateChrome();
     }
   }
 
-  /* ---- ZIP writer ---- */
+  /* ---- كاتب ZIP ---- */
   const CRC_TABLE = (function () {
     const t = new Uint32Array(256);
-    for (let n = 0; n < 256; n++) {
-      let c = n;
-      for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-      t[n] = c >>> 0;
-    }
+    for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1); t[n] = c >>> 0; }
     return t;
   })();
-  function crc32(bytes) {
-    let c = 0xFFFFFFFF;
-    for (let i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
-    return (c ^ 0xFFFFFFFF) >>> 0;
-  }
+  function crc32(b) { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC_TABLE[(c ^ b[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  
   function buildZip(entries) {
-    const encoder = new TextEncoder();
-    const parts = [], central = [];
-    let offset = 0;
-    for (const entry of entries) {
-      const nameBytes = encoder.encode(entry.name);
-      const data = entry.data;
-      const crc = crc32(data);
-      const size = data.length;
+    const enc = new TextEncoder(), parts = [], central = []; let offset = 0;
+    for (const e of entries) {
+      const nB = enc.encode(e.name), d = e.data, c = crc32(d), s = d.length;
+      const lfh = new Uint8Array(30 + nB.length), lv = new DataView(lfh.buffer);
+      lv.setUint32(0, 0x04034b50, true); lv.setUint16(4, 20, true); lv.setUint16(6, 0x0800, true);
+      lv.setUint32(14, c, true); lv.setUint32(18, s, true); lv.setUint32(22, s, true);
+      lv.setUint16(26, nB.length, true); lfh.set(nB, 30); parts.push(lfh, d);
 
-      const lfh = new Uint8Array(30 + nameBytes.length);
-      const lv = new DataView(lfh.buffer);
-      lv.setUint32(0, 0x04034b50, true);
-      lv.setUint16(4, 20, true); lv.setUint16(6, 0x0800, true);
-      lv.setUint16(8, 0, true); lv.setUint16(10, 0, true); lv.setUint16(12, 0, true);
-      lv.setUint32(14, crc, true);
-      lv.setUint32(18, size, true); lv.setUint32(22, size, true);
-      lv.setUint16(26, nameBytes.length, true); lv.setUint16(28, 0, true);
-      lfh.set(nameBytes, 30);
-      parts.push(lfh, data);
-
-      const cd = new Uint8Array(46 + nameBytes.length);
-      const cv = new DataView(cd.buffer);
-      cv.setUint32(0, 0x02014b50, true);
-      cv.setUint16(4, 20, true); cv.setUint16(6, 20, true); cv.setUint16(8, 0x0800, true);
-      cv.setUint16(10, 0, true); cv.setUint16(12, 0, true); cv.setUint16(14, 0, true);
-      cv.setUint32(16, crc, true);
-      cv.setUint32(20, size, true); cv.setUint32(24, size, true);
-      cv.setUint16(28, nameBytes.length, true);
-      cv.setUint16(30, 0, true); cv.setUint16(32, 0, true);
-      cv.setUint16(34, 0, true); cv.setUint16(36, 0, true);
-      cv.setUint32(38, 0, true); cv.setUint32(42, offset, true);
-      cd.set(nameBytes, 46);
-      central.push(cd);
-      offset += lfh.length + size;
+      const cd = new Uint8Array(46 + nB.length), cv = new DataView(cd.buffer);
+      cv.setUint32(0, 0x02014b50, true); cv.setUint16(4, 20, true); cv.setUint16(6, 20, true); cv.setUint16(8, 0x0800, true);
+      cv.setUint32(16, c, true); cv.setUint32(20, s, true); cv.setUint32(24, s, true);
+      cv.setUint16(28, nB.length, true); cv.setUint32(42, offset, true); cd.set(nB, 46);
+      central.push(cd); offset += lfh.length + s;
     }
-
-    const centralStart = offset;
-    let centralSize = 0;
-    for (const cd of central) { parts.push(cd); centralSize += cd.length; }
-
-    const eocd = new Uint8Array(22);
-    const ev = new DataView(eocd.buffer);
-    ev.setUint32(0, 0x06054b50, true);
-    ev.setUint16(8, entries.length, true);
-    ev.setUint16(10, entries.length, true);
-    ev.setUint32(12, centralSize, true);
-    ev.setUint32(16, centralStart, true);
-    parts.push(eocd);
-
+    const start = offset; let size = 0;
+    central.forEach(cd => { parts.push(cd); size += cd.length; });
+    const eocd = new Uint8Array(22), ev = new DataView(eocd.buffer);
+    ev.setUint32(0, 0x06054b50, true); ev.setUint16(8, entries.length, true); ev.setUint16(10, entries.length, true);
+    ev.setUint32(12, size, true); ev.setUint32(16, start, true); parts.push(eocd);
     return new Blob(parts, { type: 'application/zip' });
   }
 
-  /* ---- Events ---- */
-  els.folderInput.addEventListener('change', (e) => {
-    if (e.target.files && e.target.files.length) addFiles(e.target.files);
-    e.target.value = '';
-  });
-  els.fileInput.addEventListener('change', (e) => {
-    if (e.target.files && e.target.files.length) addFiles(e.target.files);
-    e.target.value = '';
-  });
-
-  ['dragenter','dragover'].forEach((ev) => {
-    els.dropZone.addEventListener(ev, (e) => { e.preventDefault(); els.dropZone.classList.add('dragover'); });
-  });
-  ['dragleave','dragend','drop'].forEach((ev) => {
-    els.dropZone.addEventListener(ev, (e) => { e.preventDefault(); els.dropZone.classList.remove('dragover'); });
-  });
-  els.dropZone.addEventListener('drop', (e) => {
-    if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
-  });
-  document.addEventListener('dragover', (e) => e.preventDefault());
-  document.addEventListener('drop', (e) => e.preventDefault());
-
-  els.modeBtns.forEach((btn) => {
+  /* ---- ربط الأحداث والتهيئة ---- */
+  
+  // تحميل الإعدادات المحفوظة
+  els.modeBtns.forEach(btn => {
+    if (btn.dataset.mode === state.mode) btn.classList.add('active');
+    else btn.classList.remove('active');
     btn.addEventListener('click', () => {
-      const mode = btn.dataset.mode;
-      if (state.mode === mode) return;
-      state.mode = mode;
-      els.modeBtns.forEach((b) => b.classList.toggle('active', b === btn));
+      state.mode = btn.dataset.mode;
+      els.modeBtns.forEach(b => b.classList.toggle('active', b === btn));
+      localStorage.setItem('imgs_mode', state.mode); // حفظ
       scheduleUpdate();
     });
   });
 
-  function updateSizeUI() {
-    els.sizeValue.textContent = state.size + ' px';
-    const pct = ((state.size - MIN_SIZE) / (MAX_SIZE - MIN_SIZE)) * 100;
-    els.sizeRange.style.setProperty('--fill', pct + '%');
-  }
+  els.sizeRange.value = state.size;
+  els.sizeValue.textContent = state.size + ' px';
+  els.sizeRange.style.setProperty('--fill', ((state.size - MIN_SIZE) / (MAX_SIZE - MIN_SIZE)) * 100 + '%');
+  
   els.sizeRange.addEventListener('input', () => {
-    const v = parseInt(els.sizeRange.value, 10);
-    state.size = isNaN(v) ? DEFAULT_SIZE : Math.min(MAX_SIZE, Math.max(MIN_SIZE, v));
-    updateSizeUI();
+    state.size = Math.min(MAX_SIZE, Math.max(MIN_SIZE, parseInt(els.sizeRange.value, 10) || DEFAULT_SIZE));
+    els.sizeValue.textContent = state.size + ' px';
+    els.sizeRange.style.setProperty('--fill', ((state.size - MIN_SIZE) / (MAX_SIZE - MIN_SIZE)) * 100 + '%');
+    localStorage.setItem('imgs_size', state.size); // حفظ
     scheduleUpdate();
   });
 
-  els.downloadAll.addEventListener('click', downloadAll);
-  els.clearAll.addEventListener('click', () => {
-    if (!state.images.length) return;
-    state.images.forEach((i) => { if (i.previewUrl) URL.revokeObjectURL(i.previewUrl); });
-    state.images = [];
-    els.gallery.innerHTML = '';
-    updateChrome();
+  // إظهار/إخفاء محاكي Miyoo
+  els.toggleMiyooBtn.addEventListener('click', () => {
+    els.miyooContainer.classList.toggle('show');
+    if (els.miyooContainer.classList.contains('show')) renderMiyooSimulator();
   });
 
-  updateSizeUI();
+  els.folderInput.addEventListener('change', (e) => { if (e.target.files.length) addFiles(e.target.files); e.target.value = ''; });
+  els.fileInput.addEventListener('change', (e) => { if (e.target.files.length) addFiles(e.target.files); e.target.value = ''; });
+  
+  ['dragenter','dragover'].forEach(ev => els.dropZone.addEventListener(ev, e => { e.preventDefault(); els.dropZone.classList.add('dragover'); }));
+  ['dragleave','dragend','drop'].forEach(ev => els.dropZone.addEventListener(ev, e => { e.preventDefault(); els.dropZone.classList.remove('dragover'); }));
+  els.dropZone.addEventListener('drop', e => { if (e.dataTransfer?.files) addFiles(e.dataTransfer.files); });
+  document.addEventListener('dragover', e => e.preventDefault());
+  document.addEventListener('drop', e => e.preventDefault());
+
+  els.downloadAll.addEventListener('click', downloadAll);
+  els.clearAll.addEventListener('click', () => {
+    state.images.forEach(i => { if (i.previewUrl) URL.revokeObjectURL(i.previewUrl); });
+    state.images = []; els.gallery.innerHTML = ''; updateChrome(); renderMiyooSimulator();
+  });
+
   updateChrome();
 })();
 </script>
